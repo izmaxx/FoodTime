@@ -24,6 +24,8 @@ public class TimeBar extends View {
     }
 
     double selection = 0.0;
+    double topSelection = 0;
+    double bottomSelection = 1;
     private Bitmap topIndicator = BitmapFactory.decodeResource(getResources(),
             R.drawable.indicator);
     private Bitmap bottomIndicator = BitmapFactory.decodeResource(getResources(),
@@ -39,10 +41,21 @@ public class TimeBar extends View {
         paint.setColor(0xFF33B5E5);
         paint.setStrokeWidth(4);
 
-        int barHeight = (int) (selection * getHeight());
-        canvas.drawRect(0, barHeight, getWidth() / 2, getHeight(), paint);
-        canvas.drawBitmap(topIndicator, getWidth() / 2, barHeight - topIndicator.getHeight() / 2, paint);
-        canvas.drawBitmap(bottomIndicator, getWidth() / 2, getHeight() - bottomIndicator.getHeight() / 2, paint);
+        if ((selection - topSelection) < (bottomSelection - selection))
+        {
+            topSelection = selection;
+        }
+        else
+        {
+            bottomSelection = selection;
+        }
+
+        int topCoord = (int)(topSelection * getHeight());
+        int botCoord = (int)(bottomSelection * getHeight());
+
+        canvas.drawRect(0, topCoord, getWidth() / 2, botCoord, paint);
+        canvas.drawBitmap(topIndicator, getWidth() / 2, topCoord - topIndicator.getHeight() / 2, paint);
+        canvas.drawBitmap(bottomIndicator, getWidth() / 2, botCoord - bottomIndicator.getHeight() / 2, paint);
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(0x000);
@@ -62,14 +75,14 @@ public class TimeBar extends View {
         }
 
         if(tcl !=null){
-            tcl.TimeBarValueChanged(event.getY());
+            tcl.TimeBarValueChanged(event.getY(), topSelection, bottomSelection);
         }
 
         return true;
     }
 
     interface TimeBarChangeListener {
-        void TimeBarValueChanged(float topY);
+        void TimeBarValueChanged(float selection, double topSelection, double bottomSelection);
     }
 
     public void setTimeBarChangeListener(TimeBarChangeListener tcl) {

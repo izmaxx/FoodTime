@@ -23,10 +23,9 @@ public class MainActivity extends Activity implements TimeBar.TimeBarChangeListe
 
     }
 
-    public void TimeBarValueChanged(float topY) {
-        textViewTop.setText("Top indicator position: " + topY);
-        // TODO - update with bottom y-coordinate
-        textViewBottom.setText("Bottom indicator position: " + topY);
+    public void TimeBarValueChanged(float selection, double topSelection, double bottomSelection) {
+        textViewTop.setText("Top indicator position: " + topSelection);
+        textViewBottom.setText("Bottom indicator position: " + bottomSelection);
     }
 
     @Override
