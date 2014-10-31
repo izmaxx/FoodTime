@@ -4,16 +4,30 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TimeBar.TimeBarChangeListener{
+
+    TextView textViewTop, textViewBottom;
+    TimeBar timeBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textViewTop = (TextView) findViewById(R.id.twHw);
+        textViewBottom = (TextView) findViewById(R.id.tvBottom);
+        timeBar = (TimeBar) findViewById(R.id.timeBar);
+        timeBar.setTimeBarChangeListener(this);
+
     }
 
+    public void TimeBarValueChanged(float topY) {
+        textViewTop.setText("Top indicator position: " + topY);
+        // TODO - update with bottom y-coordinate
+        textViewBottom.setText("Bottom indicator position: " + topY);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
